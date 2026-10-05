@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f5f2ea;
+  --paper-2: #eeebe2;
+  --ink: #151515;
+  --graphite: #55524d;
+  --soft: #a9a59b;
+  --line: rgba(21, 21, 21, 0.28);
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", Arial, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --ease: cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.025), transparent 24%),
+    radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.02), transparent 28%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.012) 0 1px, transparent 1px 4px),
+    var(--paper);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.font-serif-aln {
+  font-family: var(--font-serif);
+}
+
+.font-hand-aln {
+  font-family: var(--font-hand);
+}
+
+/* Vector Sketch Animation Classes */
+.sketch-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.5;
+}
+
+.sketch-line.faint {
+  opacity: 0.17;
+}
+
+.draw {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  animation: drawLine 3s var(--ease) forwards;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.reveal {
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .draw {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
