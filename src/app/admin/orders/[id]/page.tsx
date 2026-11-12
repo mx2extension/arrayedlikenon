@@ -6,17 +6,32 @@ import { toPng } from 'html-to-image';
 import GarmentQRCode from '@/components/GarmentQRCode';
 import { supabase } from '@/lib/supabase';
 
-export default function AdminOrderDetailPage({ params }: { params: { id: string } }) {
+export default function AdminOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [authenticityRecords, setAuthenticityRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const qrRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+  // Unwrap params using React.use() or an effect / async wrapper
   useEffect(() => {
+    let isMounted = true;
+    params.then((resolvedParams) => {
+      if (!isMounted) return;
+      setOrderId(resolvedParams.id);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [params]);
+
+  useEffect(() => {
+    if (!orderId) return;
+
     async function fetchAdminOrderData() {
       const { data, error } = await supabase
         .from('garment_authenticity')
         .select('*')
-        .eq('order_id', params.id);
+        .eq('order_id', orderId);
 
       if (!error && data) {
         setAuthenticityRecords(data);
@@ -25,7 +40,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     }
 
     fetchAdminOrderData();
-  }, [params.id]);
+  }, [orderId]);
 
   const downloadQRCode = async (recordId: string, itemCode: string) => {
     const node = qrRefs.current[recordId];
