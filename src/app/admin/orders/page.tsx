@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GarmentQRCode from '@/components/GarmentQRCode';
-import { supabaseAdmin } from '../../lib/supabase';
+import { supabaseAdmin } from '../../../lib/supabase';
 import { Order, OrderItem } from '../../lib/types';
 import { formatPrice } from '../../lib/utils';
 

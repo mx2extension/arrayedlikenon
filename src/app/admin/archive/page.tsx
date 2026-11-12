@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { supabaseAdmin } from '../../lib/supabase';
+import { supabaseAdmin } from '../../../lib/supabase';
 
 export default function AdminArchivePage() {
   const [items, setItems] = useState<any[]>([]);
