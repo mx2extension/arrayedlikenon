@@ -39,6 +39,10 @@ export async function POST(req: NextRequest) {
       .eq('tracking_id', tracking_id)
       .single();
 
+    if (!order) {
+      return NextResponse.json({ error: 'Order not found after creation' }, { status: 500 });
+    }
+
     const orderItems = items.map((item: any) => ({
       order_id: order.id,
       product_id: item.productId || item.id || null,
