@@ -100,7 +100,7 @@ export default function ProductPage() {
         size: selectedSize,
         quantity: 1,
         image: currentImage,
-      },
+      } as any,
     });
 
     setAdded(true);
