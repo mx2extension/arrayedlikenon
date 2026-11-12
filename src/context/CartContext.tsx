@@ -1,22 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-export interface CartItem {
-  id: string;
-  productId?: string;
-  title: string;
-  price: number;
-  image: string;
-  color?: string | null;
-  size?: string | null;
-  quantity: number;
-}
+import { CartItem } from '@/lib/types';
 
 interface CartContextType {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (id: string) => void;
+  removeFromCart: (uid: string) => void;
   clearCart: () => void;
   subtotal: number;
 }
@@ -49,9 +39,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (newItem: CartItem) => {
     setCart((prev) => {
-      const index = prev.findIndex(
-        (i) => (i.id === newItem.id || i.productId === newItem.productId) && i.size === newItem.size
-      );
+      const index = prev.findIndex((i) => i.uid === newItem.uid);
 
       let updated: CartItem[];
       if (index > -1) {
@@ -68,9 +56,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromCart = (id: string) => {
+  const removeFromCart = (uid: string) => {
     setCart((prev) => {
-      const updated = prev.filter((item) => item.id !== id && item.productId !== id);
+      const updated = prev.filter((item) => item.uid !== uid);
       localStorage.setItem('aln_cart', JSON.stringify(updated));
       localStorage.setItem('cart', JSON.stringify(updated));
       return updated;
