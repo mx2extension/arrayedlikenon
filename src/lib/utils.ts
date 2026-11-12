@@ -1,9 +1,15 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { supabaseAdmin } from './supabase';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function formatPrice(amount: number, currency: string = process.env.NEXT_PUBLIC_CURRENCY || 'USD'): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency,
+    currency: currency || 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
@@ -24,6 +30,8 @@ export function slugify(text: string): string {
 }
 
 export async function uploadImage(file: File): Promise<string> {
+  if (!supabaseAdmin) throw new Error('Supabase admin client is not configured.');
+
   const ext = file.name.split('.').pop();
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import GarmentQRCode from '@/components/GarmentQRCode';
 import { supabaseAdmin } from '../../../lib/supabase';
 import { Order, OrderItem } from '../../lib/types';
-import { formatPrice } from '../../lib/utils';
+import { formatPrice } from '@/lib/utils';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<(Order & { items?: OrderItem[]; authenticityRecords?: any[] })[]>([]);
