@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Caveat, Inter } from 'next/font/google';
+import { Cormorant_Garamond, Inter } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '../lib/cart-context';
 import Navbar from '../components/Navbar';
@@ -11,18 +11,14 @@ const serif = Cormorant_Garamond({
   weight: ['300', '400', '500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
-});
-
-const handwritten = Caveat({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-handwriting',
+  display: 'swap',
 });
 
 const sans = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-sans',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -34,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${serif.variable} ${handwritten.variable} ${sans.variable}`}
+      className={`scroll-smooth ${serif.variable} ${sans.variable}`}
     >
       <body className="bg-[#f5f2ea] text-[#151515] font-sans relative selection:bg-[#151515] selection:text-[#f5f2ea] overflow-x-hidden">
         <div
