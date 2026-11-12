@@ -36,7 +36,7 @@ export interface Product {
   cover_image: string | null;
   gender: string[];     // e.g., ['unisex', 'men', 'women']
   categories: string[]; // e.g., ['tops', 'accessories', 'headwear', 'cap']
-  tags?: string[];       // e.g., ['archive', 'limited-edition', 'summer-2026']
+  tags?: string[];      // e.g., ['archive', 'limited-edition', 'summer-2026']
   is_active: boolean;
   order_index: number;
   created_at: string;
@@ -93,6 +93,18 @@ export interface ArchiveItem {
   created_at: string;
 }
 
+export interface OrderItem {
+  id: string;
+  order_id: string;
+  product_id: string | null;
+  product_title: string;
+  product_number: string | null;
+  color: string | null;
+  size: string | null;
+  price: number;
+  quantity: number;
+}
+
 export interface Order {
   id: string;
   tracking_id: string;
@@ -109,17 +121,5 @@ export interface Order {
   payment_reference: string | null;
   flutterwave_transaction_id: string | null;
   created_at: string;
-  items?: OrderItem[];
-}
-
-export interface OrderItem {
-  id: string;
-  order_id: string;
-  product_id: string | null;
-  product_title: string;
-  product_number: string | null;
-  color: string | null;
-  size: string | null;
-  price: number;
-  quantity: number;
+  order_items?: OrderItem[];
 }
