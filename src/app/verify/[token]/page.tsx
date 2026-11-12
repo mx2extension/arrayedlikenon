@@ -1,11 +1,17 @@
 import { supabase } from '@/lib/supabase';
 
-export default async function VerifyPage({ params }: { params: { token: string } }) {
+type Props = {
+  params: Promise<{ token: string }>;
+};
+
+export default async function VerifyPage({ params }: Props) {
+  const { token } = await params;
+
   // Fetch authenticity record directly via token (UUID)
   const { data: item } = await supabase
     .from('garment_authenticity')
     .select('*')
-    .eq('id', params.token)
+    .eq('id', token)
     .single();
 
   const isValid = !!item;
