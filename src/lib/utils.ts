@@ -29,15 +29,34 @@ export function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadImage(
+  fileOrBuffer: File | Buffer,
+  fileName?: string,
+  contentType?: string
+): Promise<string> {
   if (!supabaseAdmin) throw new Error('Supabase admin client is not configured.');
 
-  const ext = file.name.split('.').pop();
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  let path = '';
+  let mime = contentType || 'application/octet-stream';
+  let payload: File | Buffer = fileOrBuffer;
+
+  if (fileOrBuffer instanceof Buffer) {
+    if (!fileName) throw new Error('File name is required when uploading from a Buffer.');
+    const ext = fileName.split('.').pop() || 'png';
+    path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    payload = fileOrBuffer;
+  } else if ('name' in fileOrBuffer) {
+    const ext = fileOrBuffer.name.split('.').pop() || 'png';
+    path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    mime = fileOrBuffer.type;
+    payload = fileOrBuffer;
+  } else {
+    throw new Error('Invalid file payload provided.');
+  }
 
   const { error } = await supabaseAdmin.storage
     .from('aln-images')
-    .upload(path, file, { contentType: file.type });
+    .upload(path, payload, { contentType: mime });
 
   if (error) throw error;
 
