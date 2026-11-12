@@ -13,6 +13,7 @@ export default function AdminArchivePage() {
   useEffect(() => { loadItems(); }, []);
 
   async function loadItems() {
+    if (!supabaseAdmin) return;
     const { data } = await supabaseAdmin.from('archive_items').select('*').order('order_index');
     if (data) setItems(data);
   }
@@ -30,6 +31,10 @@ export default function AdminArchivePage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    if (!supabaseAdmin) {
+      alert('Supabase admin client is not configured.');
+      return;
+    }
     setLoading(true);
     try {
       if (editing) {
@@ -49,6 +54,7 @@ export default function AdminArchivePage() {
   }
 
   async function deleteItem(id: string) {
+    if (!supabaseAdmin) return;
     if (!confirm('Delete this archive item?')) return;
     await supabaseAdmin.from('archive_items').delete().eq('id', id);
     await loadItems();
