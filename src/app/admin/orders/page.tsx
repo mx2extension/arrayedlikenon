@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GarmentQRCode from '@/components/GarmentQRCode';
-import { supabaseAdmin } from '../../../lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 import { Order, OrderItem } from '@/lib/types';
 import { formatPrice } from '@/lib/utils';
 
@@ -20,6 +20,10 @@ export default function AdminOrdersPage() {
 
   async function loadOrders() {
     setLoading(true);
+    if (!supabaseAdmin) {
+      setLoading(false);
+      return;
+    }
     let query = supabaseAdmin.from('orders').select('*').order('created_at', { ascending: false });
     if (statusFilter) query = query.eq('status', statusFilter);
     const { data } = await query;
@@ -33,6 +37,8 @@ export default function AdminOrdersPage() {
       return;
     }
     setExpanded(orderId);
+
+    if (!supabaseAdmin) return;
 
     // Fetch order items and authenticity records in parallel
     const [itemsRes, authenticityRes] = await Promise.all([
@@ -54,6 +60,7 @@ export default function AdminOrdersPage() {
   }
 
   async function updateStatus(orderId: string, newStatus: string) {
+    if (!supabaseAdmin) return;
     await supabaseAdmin.from('orders').update({ status: newStatus }).eq('id', orderId);
     setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o)));
   }
